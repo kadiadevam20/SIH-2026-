@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASTRA — Real Voice Mode</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="card">
+    <span class="badge real">Production ASTRA module — real voice mode</span>
+    <h1>ASTRA Voice SOS</h1>
+    <p class="subtitle">
+      Say "<strong>{{ wake_word|upper }}</strong>" out loud to trigger an SOS event.
+      Requires microphone access and Chrome or Edge.
+    </p>
+
+    <div id="warn-box" class="warn-box"></div>
+
+    <div class="status-row">
+      <span id="status-dot" class="dot"></span>
+      <span id="status-text">Idle</span>
+    </div>
+
+    <button id="mic-btn" class="mic-btn" title="Start / stop listening">🎤</button>
+
+    <div id="transcript-box" class="transcript-box">Transcript will appear here…</div>
+
+    <div class="btn-row">
+      <button id="manual-sos-btn" class="action danger">Manual SOS (panic button)</button>
+      <button id="reset-btn" class="action">Reset demo</button>
+    </div>
+
+    <div id="sos-banner" class="sos-banner"></div>
+
+    <div id="events-list" class="events"></div>
+
+    <div class="footer-links">
+      <a href="/simulate">Switch to SIH Simulation mode →</a>
+      <a href="/docs">API docs</a>
+    </div>
+  </div>
+
+  <script>window.ASTRA_WAKE_WORD = "{{ wake_word }}";</script>
+  <script src="/static/astra.js"></script>
+</body>
+</html>
