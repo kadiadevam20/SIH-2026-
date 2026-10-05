@@ -1,4 +1,4 @@
-# 🛡️ DURGA --- Dynamic Unified Risk-Awareness Guardian AI
+# 🛡️ DURGA — Dynamic Unified Risk-Awareness Guardian AI
 
 > **AI-powered women's safety and risk-awareness platform developed for
 > Smart India Hackathon 2026**
@@ -11,32 +11,22 @@ even when manually requesting help may not be possible.
 The project combines **AI-based risk awareness, GIS/H3-based dynamic
 safety zones, location-aware monitoring, voice activation, autonomous
 SOS concepts, emergency assistance, and offline safety support** into a
-unified safety ecosystem.
+unified safety ecosystem, delivered through a **Flutter mobile/web
+frontend** and a **FastAPI-based ASTRA voice-SOS backend**.
 
 ------------------------------------------------------------------------
 
 ## 🏆 Smart India Hackathon 2026
 
-  ---------------------------------------------------------------------
-  Detail                             Information
-  ---------------------------------- ----------------------------------
-  **Problem Statement**              From Uncertainty to Awareness:
-                                     Addressing Women's Safety
-                                     Challenges
-
-  **Theme**                          AI-Powered Women's Safety & Risk
-                                     Awareness
-
-  **PS Category**                    Software & Hardware
-
-  **Problem Statement ID**           Student Innovation
-
-  **Team ID**                        151101
-
-  **Team Name**                      ASTRA
-
-  **Project**                        DURGA
-  ---------------------------------------------------------------------
+| Detail | Information |
+|--------|-------------|
+| **Problem Statement** | From Uncertainty to Awareness: Addressing Women's Safety Challenges |
+| **Theme** | AI-Powered Women's Safety & Risk Awareness |
+| **PS Category** | Software & Hardware |
+| **Problem Statement ID** | Student Innovation |
+| **Team ID** | 151101 |
+| **Team Name** | ASTRA |
+| **Project** | DURGA |
 
 ------------------------------------------------------------------------
 
@@ -50,6 +40,7 @@ unified safety ecosystem.
 -   [Dynamic Risk-Zone Concept](#-dynamic-risk-zone-concept)
 -   [ASTRA Voice SOS](#-astra-voice-sos)
 -   [System Architecture](#-system-architecture)
+-   [Frontend (Flutter App)](#-frontend-flutter-app)
 -   [Technology Stack](#-technology-stack)
 -   [Repository Structure](#-repository-structure)
 -   [Getting Started](#-getting-started)
@@ -132,6 +123,7 @@ DURGA combines multiple safety mechanisms into one platform:
 -   **Autonomous SOS alert concepts**
 -   **Nearby police and hospital identification**
 -   **Offline safety support**
+-   **Flutter app with SOS, map, chat, trusted contacts and reporting**
 
 The goal is to provide useful safety awareness **before**, **during**,
 and **after** a potentially dangerous situation.
@@ -173,6 +165,7 @@ The system supports:
 
 -   voice-triggered SOS
 -   manual SOS fallback
+-   hold-to-activate SOS bar in the Flutter app
 -   SOS event recording
 -   optional webhook-based integration with a DURGA backend
 
@@ -188,6 +181,13 @@ The overall DURGA concept includes identifying nearby:
 
 The proposed system also considers safety guidance and essential support
 when normal network availability is limited.
+
+### 📱 Flutter Frontend
+
+A cross-platform Flutter app provides the user-facing experience:
+onboarding, home dashboard, safety map, DURGA chat assistant, trusted
+contacts, device pairing, emergency screen, nearby help, incident
+reporting, offline mode and settings.
 
 ------------------------------------------------------------------------
 
@@ -317,19 +317,20 @@ A manual panic-button endpoint is also available as a fallback.
 
 ## 🏗️ System Architecture
 
-The current repository is organized around a FastAPI application:
+The current repository is organized around a FastAPI application, with
+the Flutter app acting as the main user-facing client:
 
 ``` text
                     ┌─────────────────────┐
                     │     User / Demo     │
                     └──────────┬──────────┘
                                │
-                 ┌─────────────┴─────────────┐
-                 │                           │
-          Real Voice Mode              Simulation Mode
-              "/"                       "/simulate"
-                 │                           │
-                 └─────────────┬─────────────┘
+        ┌──────────────────────┼──────────────────────┐
+        │                      │                      │
+  Flutter App           Real Voice Mode         Simulation Mode
+ (durga-ai-flutter)          "/"                  "/simulate"
+        │                      │                      │
+        └──────────────────────┼──────────────────────┘
                                ▼
                     ┌─────────────────────┐
                     │    FastAPI Server   │
@@ -356,7 +357,139 @@ The current repository is organized around a FastAPI application:
 
 ------------------------------------------------------------------------
 
+## 📱 Frontend (Flutter App)
+
+The DURGA user interface is built with **Flutter**. It is a Flutter port
+of the earlier Expo (React Native) phone demo and reproduces the same UI,
+design system and SOS behaviour, with the added benefit of running on
+web, Android and iOS from a single codebase.
+
+| Item | Detail |
+|------|--------|
+| **Project folder** | `durga-ai-flutter` |
+| **Reference UI** | `durga-ai` (Expo SDK 57 phone demo) |
+| **Framework** | Flutter 3.47 (stable) |
+| **Language** | Dart 3.13 |
+| **Last updated** | 7 September 2026 |
+
+### Frontend Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Framework | Flutter 3.47 (stable) |
+| Language | Dart 3.13 |
+| Routing | go_router 14 |
+| State management | Provider (`AppState` / `ChangeNotifier`) |
+| Fonts | google_fonts (Plus Jakarta Sans + Playfair Display) |
+| Icons | lucide_icons_flutter |
+| Local storage | shared_preferences |
+| Permissions | permission_handler |
+| SVG | flutter_svg |
+
+### Design System
+
+| Token | Hex | Use |
+|-------|-----|-----|
+| Cream | `#F5F1E8` | Background |
+| Maroon | `#7A1D1D` | Primary, SOS, buttons |
+| Ink | `#0F0F0F` | Text |
+| Muted | `#6B5E55` | Secondary text |
+| Safe | `#22C55E` | Low risk |
+| Moderate | `#F59E0B` | Medium risk |
+| High | `#C0392B` | High risk |
+
+**Typography:** Plus Jakarta Sans (body) · Playfair Display (brand, quotes)
+
+### SOS Behaviour (Frontend)
+
+Hold the **SOS bar for 1.2 seconds** to trigger the emergency flow and
+navigate directly to `/emergency`. This matches the Expo demo. The
+intermediate cream "hold" page has been removed, and `/sos` now simply
+redirects to the emergency screen.
+
+### Screens
+
+| Screen | Route | Status |
+|--------|-------|--------|
+| Boot | `/` | ✅ Done |
+| Login | `/onboarding` | ✅ Done |
+| Signup | `/onboarding/signup` | ✅ Done |
+| Permissions | `/onboarding/permissions` | ✅ Done |
+| Home | `/home` | ✅ Done |
+| Map | `/map` | ✅ Done |
+| DURGA Chat | `/durga` | ✅ Done |
+| Contacts | `/contacts` | ✅ Done |
+| Device | `/hardware` | ✅ Done |
+| SOS | `/sos` (redirects to `/emergency`) | ✅ Done |
+| Emergency | `/emergency` | ✅ Done |
+| Nearby Help | `/nearby-help` | ✅ Done |
+| Report | `/report` | ✅ Done |
+| Offline | `/offline` | ✅ Done |
+| Settings | `/settings` | ✅ Done |
+| Instructions | `/settings/tutorials` | ✅ Done |
+| Add / Edit Contact | `/trusted-contact/*` | ✅ Done |
+| Profile, Language, Accessibility, Privacy, Emergency Settings | — | ⏳ Expo only (not yet ported) |
+
+### Frontend Folder Structure
+
+``` text
+lib/
+├── main.dart
+├── router/app_router.dart
+├── providers/app_state.dart
+├── theme/app_colors.dart
+├── data/mock_data.dart
+├── screens/          # onboarding, tabs, sos, emergency, settings, …
+└── widgets/          # SOSBar, CustomTabShell, QuoteBackdrop, SafetyMap, …
+```
+
+### Running the Flutter App
+
+**1. Make sure Flutter is on your PATH.** If `flutter` is not recognized
+on Windows (PowerShell), add the Flutter `bin` folder to your path, for
+example:
+
+``` powershell
+$env:Path += ";C:\path\to\flutter\bin"
+```
+
+**2. Build and run:**
+
+``` bash
+cd durga-ai-flutter
+flutter create . --project-name durga_ai   # first time only
+flutter pub get
+flutter run -d chrome
+```
+
+| Platform | Command |
+|----------|---------|
+| Web | `flutter run -d chrome` |
+| Android | `flutter run` (requires Android Studio + SDK) |
+| iOS | `flutter run` (requires macOS) |
+
+### Frontend TODO
+
+- [ ] Port settings sub-screens (profile, language, accessibility, privacy, emergency settings)
+- [ ] Port the diagonal settings slide animation from the Expo version
+- [ ] Android build setup (Android Studio + SDK)
+- [ ] Connect the Flutter SOS flow to the ASTRA/DURGA backend endpoints
+
+------------------------------------------------------------------------
+
 ## 🛠️ Technology Stack
+
+### Frontend (Mobile / Web App)
+
+-   Flutter 3.47
+-   Dart 3.13
+-   go_router
+-   Provider
+-   google_fonts
+-   lucide_icons_flutter
+-   shared_preferences
+-   permission_handler
+-   flutter_svg
 
 ### Backend
 
@@ -368,7 +501,7 @@ The current repository is organized around a FastAPI application:
 -   Jinja2
 -   HTTPX
 
-### Frontend / Browser Capabilities
+### ASTRA Web Module (Browser Capabilities)
 
 -   HTML
 -   JavaScript
@@ -409,6 +542,9 @@ SIH-2026-/
 │
 ├── tests/
 │
+├── durga-ai-flutter/        # Flutter frontend (see Frontend section)
+│   └── lib/
+│
 ├── requirements.txt
 ├── run.bat
 └── README.md
@@ -416,35 +552,19 @@ SIH-2026-/
 
 ### Important files
 
-  ---------------------------------------------------------------------
-  File / Folder                      Purpose
-  ---------------------------------- ----------------------------------
-  `app/main.py`                      FastAPI application, routes and
-                                     ASTRA detection API
-
-  `app/config.py`                    Environment-based application
-                                     configuration
-
-  `app/models.py`                    Request/response and SOS event
-                                     models
-
-  `app/sos_handler.py`               SOS event handling and DURGA
-                                     integration point
-
-  `app/templates/`                   Web interfaces for real and
-                                     simulation modes
-
-  `app/static/`                      Frontend static assets
-
-  `simulation/`                      Demonstration/simulation
-                                     components
-
-  `tests/`                           Automated tests
-
-  `requirements.txt`                 Python dependencies
-
-  `run.bat`                          Windows one-command launcher
-  ---------------------------------------------------------------------
+| File / Folder | Purpose |
+|---------------|---------|
+| `app/main.py` | FastAPI application, routes and ASTRA detection API |
+| `app/config.py` | Environment-based application configuration |
+| `app/models.py` | Request/response and SOS event models |
+| `app/sos_handler.py` | SOS event handling and DURGA integration point |
+| `app/templates/` | Web interfaces for real and simulation modes |
+| `app/static/` | Frontend static assets |
+| `simulation/` | Demonstration/simulation components |
+| `tests/` | Automated tests |
+| `durga-ai-flutter/` | Flutter app (UI, routing, state, theme, widgets) |
+| `requirements.txt` | Python dependencies |
+| `run.bat` | Windows one-command launcher |
 
 ------------------------------------------------------------------------
 
@@ -461,6 +581,7 @@ You will need:
 -   pip
 -   A modern Chromium-based browser such as Chrome or Edge for real
     voice mode
+-   Flutter 3.47 (only if running the Flutter frontend)
 
 ------------------------------------------------------------------------
 
@@ -539,6 +660,18 @@ http://127.0.0.1:8000
 
 ------------------------------------------------------------------------
 
+## Option 3 --- Run the Flutter Frontend
+
+See [Running the Flutter App](#running-the-flutter-app):
+
+``` bash
+cd durga-ai-flutter
+flutter pub get
+flutter run -d chrome
+```
+
+------------------------------------------------------------------------
+
 ## 🎙️ Real Voice Mode
 
 Open:
@@ -587,29 +720,15 @@ http://127.0.0.1:8000/healthz
 
 # 🔌 API Endpoints
 
-  -----------------------------------------------------------------------
-  Method                  Endpoint                Purpose
-  ----------------------- ----------------------- -----------------------
-  `GET`                   `/`                     Real ASTRA voice
-                                                  interface
-
-  `GET`                   `/simulate`             SIH demonstration
-                                                  interface
-
-  `GET`                   `/healthz`              Application health
-                                                  check
-
-  `POST`                  `/api/astra/detect`     Detect ASTRA wake word
-                                                  and trigger SOS
-
-  `POST`                  `/api/sos/manual`       Manual SOS trigger
-
-  `GET`                   `/api/sos/events`       View recorded SOS
-                                                  events
-
-  `POST`                  `/api/sos/reset`        Reset recorded SOS
-                                                  events
-  -----------------------------------------------------------------------
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| `GET` | `/` | Real ASTRA voice interface |
+| `GET` | `/simulate` | SIH demonstration interface |
+| `GET` | `/healthz` | Application health check |
+| `POST` | `/api/astra/detect` | Detect ASTRA wake word and trigger SOS |
+| `POST` | `/api/sos/manual` | Manual SOS trigger |
+| `GET` | `/api/sos/events` | View recorded SOS events |
+| `POST` | `/api/sos/reset` | Reset recorded SOS events |
 
 ------------------------------------------------------------------------
 
@@ -630,14 +749,14 @@ EVENT_LOG_PATH=astra_events.log
 
 ### Configuration details
 
-  Variable            Purpose
-  ------------------- ---------------------------------------------
-  `HOST`              Server host
-  `PORT`              Server port
-  `WAKE_WORD`         Voice wake word
-  `MIN_CONFIDENCE`    Minimum confidence for real voice detection
-  `SOS_WEBHOOK_URL`   Optional DURGA SOS webhook
-  `EVENT_LOG_PATH`    Local SOS event log location
+| Variable | Purpose |
+|----------|---------|
+| `HOST` | Server host |
+| `PORT` | Server port |
+| `WAKE_WORD` | Voice wake word |
+| `MIN_CONFIDENCE` | Minimum confidence for real voice detection |
+| `SOS_WEBHOOK_URL` | Optional DURGA SOS webhook |
+| `EVENT_LOG_PATH` | Local SOS event log location |
 
 No paid API key is required by the current ASTRA module.
 
@@ -679,6 +798,15 @@ supporting:
 -   optional HTTP webhook integration
 -   automated tests
 -   FastAPI Swagger documentation
+
+### Flutter Frontend
+
+The Flutter app (`durga-ai-flutter`) has ported nearly all screens from
+the Expo demo, including onboarding, home, map, DURGA chat, contacts,
+device, emergency, nearby help, report, offline, settings, tutorials and
+trusted-contact management. Remaining work: the profile, language,
+accessibility, privacy and emergency-settings sub-screens, the diagonal
+settings slide animation, and Android build setup.
 
 ### DURGA Integration
 
@@ -725,7 +853,7 @@ The broader DURGA platform can be extended with:
 
 ### Platform Expansion
 
--   mobile application
+-   production Android and iOS releases of the Flutter app
 -   stronger authentication and privacy controls
 -   analytics dashboard
 -   larger-scale crime/risk datasets
@@ -779,6 +907,9 @@ The project proposal references the following resources:
 -   **MDN Web Docs --- Web Speech API**\
     https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
 
+-   **Flutter Documentation**\
+    https://docs.flutter.dev/
+
 ------------------------------------------------------------------------
 
 # 👥 Team
@@ -822,10 +953,12 @@ should be added to the repository.
 
 ------------------------------------------------------------------------
 
-::: {align="center"}
+<div align="center">
+
 ### 🛡️ DURGA --- Dynamic Unified Risk-Awareness Guardian AI
 
 **From Uncertainty to Awareness**
 
 **Built for Smart India Hackathon 2026 🇮🇳**
-:::
+
+</div>
