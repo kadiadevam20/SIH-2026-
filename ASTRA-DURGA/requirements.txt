@@ -1,0 +1,24 @@
+# ASTRA-DURGA — Python dependencies
+# Verified compatible with Python 3.14.3 as of August 2026.
+# Every package below is free/open-source (no paid SDK, no paid API key).
+#
+# NOTE on uvicorn: we intentionally install plain `uvicorn`, NOT
+# `uvicorn[standard]`. The [standard] extra pulls in uvloop/httptools,
+# which are C-extension packages that can lag behind brand-new CPython
+# releases on Windows (no prebuilt wheel yet -> pip tries to compile from
+# source -> fails without a C compiler). Plain `uvicorn` is pure-Python,
+# installs reliably on a fresh Python 3.14.3 + Windows setup, and is more
+# than fast enough for this app. If, by the time you install this, Windows
+# wheels exist for uvicorn[standard] on 3.14 and you want the extra
+# performance, you may switch to it — see README "Troubleshooting".
+
+fastapi==0.119.0
+pydantic==2.13.4
+pydantic-settings==2.15.0
+uvicorn==0.35.0
+jinja2==3.1.6
+httpx==0.28.1
+python-dotenv==1.0.1
+
+# Testing
+pytest==8.3.4

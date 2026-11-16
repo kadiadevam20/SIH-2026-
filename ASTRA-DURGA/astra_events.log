@@ -1,0 +1,3 @@
+{"id":1,"triggered_at":"2026-11-03T05:09:08.917364Z","trigger_source":"real","transcript":"Astra","confidence":0.8402692675590515,"message":"ASTRA wake word detected — SOS triggered."}
+{"id":2,"triggered_at":"2026-11-03T05:09:28.849970Z","trigger_source":"real","transcript":"vastra","confidence":0.7206782698631287,"message":"ASTRA wake word detected — SOS triggered."}
+{"id":3,"triggered_at":"2026-11-03T05:09:39.474861Z","trigger_source":"real","transcript":"Astra","confidence":0.8868753910064697,"message":"ASTRA wake word detected — SOS triggered."}

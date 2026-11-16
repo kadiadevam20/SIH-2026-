@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASTRA — SIH Simulation</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="card">
+    <span class="badge sim">SIH demonstration simulation — no microphone used</span>
+    <h1>ASTRA Simulation</h1>
+    <p class="subtitle">
+      This page is built for judge presentations. It never touches the microphone
+      or any speech recognizer — every trigger below is deterministic and instant.
+    </p>
+
+    <div class="status-row">
+      <span id="status-dot" class="dot"></span>
+      <span id="status-text">Idle</span>
+    </div>
+
+    <div class="btn-row">
+      <button id="simulate-btn" class="action primary">Simulate saying "{{ wake_word|upper }}"</button>
+      <button id="reset-btn" class="action">Reset demo</button>
+    </div>
+
+    <div id="sos-banner" class="sos-banner"></div>
+
+    <div id="events-list" class="events"></div>
+
+    <div class="footer-links">
+      <a href="/">Switch to Real Voice mode →</a>
+      <a href="/docs">API docs</a>
+    </div>
+  </div>
+
+  <script>window.ASTRA_WAKE_WORD = "{{ wake_word }}";</script>
+  <script src="/static/simulate.js"></script>
+</body>
+</html>
